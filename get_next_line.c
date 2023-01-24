@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:08 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/01/22 21:16:14 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/01/24 23:14:59 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,54 +17,101 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-int	get_char(int fd)
+// finds the first line ending in \n from buffer
+// this is the line for get_next_line to return
+char	*next_line(char *a)
 {
-	unsigned char	c;
-	int				i;
+	int		i;
+	char	*buf;
 
-	i = read(fd, &c, 1);
-	if (i == 1)
-		return (c);
-	else
-		return (-1);
-}
-
-// TODO:
-// recode this to less than 25 lines
-
-char	*get_next_line(int fd)
-{
-	static int	bytes;
-	int			i;
-	char		c;
-	char		*buf;
-
-	bytes = 0;
+	if (!a || !a[0])
+		return (NULL);
 	i = 0;
-	buf = (char *) malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	while (a[i] && a[i] != '\n')
+		i++;
+	if (a[i] == '\n')
+		i++;
+	buf = (char *)malloc((sizeof(char) * i) + 1);
 	if (!buf)
 		return (NULL);
-	buf[i] = '\0';
-	c = get_char(fd);
-	while (c != -1)
+	i = 0;
+	while (a[i] && a[i] != '\n')
 	{
-		if (c == '\n')
+		buf[i] = a[i];
+		i++;
+	}
+	if (a[i] == '\n')
+		buf[i++] = '\n';
+	buf[i] = '\0';
+	return (buf);
+}
+
+// finds the end of the line we just returned in the buffer
+// moves it to the end of new buffer
+// changes the \n before it to '\0', so our new buffer does not contain it
+// this offsets our buffer so the buffer now starts at the next line to be printed
+char	*offset(char *a)
+{
+	char	*buf;
+	int		i;
+	int		x;
+
+	i = 0;
+	x = 0;
+	while (a[i] && a[i] != '\n')
+		i++;
+	if (a[i] == '\0')
+	{
+		free(a);
+		return (NULL);
+	}
+	if (a[i] == '\n')
+		i++;
+	buf = (char *)malloc(ft_strlen(a) - i + 1);
+	while (a[i + x])
+	{
+		buf[x] = a[i + x];
+		x++;
+	}
+	buf[x] = '\0';
+	free(a);
+	return (buf);
+}
+
+// static buffer str starts at the next line to be printed
+// we use strchr to find if there is a \n in the buffer
+// if theres not, we read from the file into the buffer
+// if \n is present, this is the line to print
+// next_line then gets the first line ending in '\n' from the static buffer
+// we return this line
+// then we offset the static buffer by the line we just returned
+char	*get_next_line(int fd)
+{
+	static char		*str;
+	char			*buf;
+	int				i;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buf = (char *)malloc((sizeof(char) * BUFFER_SIZE) + 1);
+	if (!buf)
+		return (NULL);
+	i = 1;
+	while (!(ft_strchr(str, '\n')) && i != 0)
+	{
+		i = read(fd, buf, BUFFER_SIZE);
+		if (i == -1)
 		{
-			buf[i++] = c;
-			buf[i] = '\0';
-			bytes += i;
-			return (buf);
+			free(buf);
+			return (NULL);
 		}
-		buf[i++] = c;
-		c = get_char(fd);
+		buf[i] = '\0';
+		str = ft_strjoin(str, buf);
 	}
-	buf[i] = '\0';
-	if (c == -1 && i > 0)
-	{
-		bytes += i;
-		return (buf);
-	}
-	return (NULL);
+	free(buf);
+	buf = next_line(str);
+	str = offset(str);
+	return (buf);
 }
 
 int	main(int argc, char *argv[])

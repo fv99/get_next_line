@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:28 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/01/22 21:14:25 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/01/24 22:28:50 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,17 @@
 # endif
 
 char	*get_next_line(int fd);
+
+int		ft_strlen(char *str);
+
+char	*ft_strcpy(char *dest, char *src);
+
+char	*ft_strdup(char *src);
+
+char	*ft_strcat(char *dest, char *src);
+
+char	*ft_strjoin(char const *s1, char const *s2);
+
+char	*ft_strchr(const char *src, int c);
 
 #endif
