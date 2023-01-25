@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:08 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/01/24 23:14:59 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:20:01 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ char	*next_line(char *a)
 // finds the end of the line we just returned in the buffer
 // moves it to the end of new buffer
 // changes the \n before it to '\0', so our new buffer does not contain it
-// this offsets our buffer so the buffer now starts at the next line to be printed
+// this offsets our buffer, the buffer now starts
+// at the next line to be printed
 char	*offset(char *a)
 {
 	char	*buf;
@@ -114,27 +115,27 @@ char	*get_next_line(int fd)
 	return (buf);
 }
 
-int	main(int argc, char *argv[])
-{
-	char	*line;
-	int		fd;
+// int	main(int argc, char *argv[])
+// {
+// 	char	*line;
+// 	int		fd;
 
-	if (argc < 2)
-	{
-		printf("Usage: %s <file>\n", argv[0]);
-		return (1);
-	}
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-	{
-		perror("Failed to open file");
-		return (1);
-	}
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		printf("%s", line);
-	}
-	close (fd);
-	return (0);
-}
+// 	if (argc < 2)
+// 	{
+// 		printf("Usage: %s <file>\n", argv[0]);
+// 		return (1);
+// 	}
+// 	fd = open(argv[1], O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		perror("Failed to open file");
+// 		return (1);
+// 	}
+// 	while (line != NULL)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("%s", line);
+// 	}
+// 	close (fd);
+// 	return (0);
+// }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 21:21:16 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/01/25 14:53:06 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:52:47 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,21 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
 char	*ft_strdup(char *src)
 {
 	char	*dst;
+	int		i;
 
+	i = 0;
 	dst = malloc(ft_strlen(src) + 1);
 	if (!dst)
 		return (NULL);
-	ft_strcpy(dst, src);
+	while (src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
 	return (dst);
 }
 

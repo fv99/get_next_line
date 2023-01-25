@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line bonus.h                              :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:28 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/01/25 14:52:44 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:52:07 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 char	*get_next_line(int fd);
 
 int		ft_strlen(char *str);
-
-char	*ft_strcpy(char *dest, char *src);
 
 char	*ft_strdup(char *src);
 
