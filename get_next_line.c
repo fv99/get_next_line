@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:08 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/02/02 15:14:14 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/02/02 16:58:43 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ char	*offset(char *a)
 
 	i = 0;
 	x = 0;
+	if (!a)
+		return (NULL);
 	while (a[i] && a[i] != '\n')
 		i++;
 	if (a[i] == '\0')
@@ -69,11 +71,8 @@ char	*offset(char *a)
 	if (a[i] == '\n')
 		i++;
 	buf = (char *)malloc(ft_strlen(a) - i + 1);
-	while (a[i + x])
-	{
-		buf[x] = a[i + x];
-		x++;
-	}
+	while (a[i])
+		buf[x++] = a[i++];
 	buf[x] = '\0';
 	free(a);
 	return (buf);
@@ -98,6 +97,7 @@ char	*read_file(int fd, char *str, char *buf)
 		free(str);
 		str = tmp;
 	}
+	free (buf);
 	return (str);
 }
 
@@ -119,7 +119,8 @@ char	*get_next_line(int fd)
 	if (!buf)
 		return (NULL);
 	str = read_file(fd, str, buf);
-	free(buf);
+	if (!str)
+		return (NULL);
 	buf = next_line(str);
 	str = offset(str);
 	return (buf);

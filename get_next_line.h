@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:28 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/02/02 13:08:37 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/02/02 15:40:09 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 255
+#  define BUFFER_SIZE 10000000
 # endif
 
 char	*get_next_line(int fd);

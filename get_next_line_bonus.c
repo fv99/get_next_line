@@ -6,12 +6,11 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 14:52:07 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/02/02 15:14:07 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/02/02 16:57:18 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-
 #include <stdlib.h>
 #include <unistd.h>
 // needed for main:
@@ -60,6 +59,8 @@ char	*offset(char *a)
 
 	i = 0;
 	x = 0;
+	if (!a)
+		return (NULL);
 	while (a[i] && a[i] != '\n')
 		i++;
 	if (a[i] == '\0')
@@ -70,18 +71,16 @@ char	*offset(char *a)
 	if (a[i] == '\n')
 		i++;
 	buf = (char *)malloc(ft_strlen(a) - i + 1);
-	while (a[i + x])
-	{
-		buf[x] = a[i + x];
-		x++;
-	}
+	while (a[i])
+		buf[x++] = a[i++];
 	buf[x] = '\0';
 	free(a);
 	return (buf);
 }
 
-char	*read_file(int fd, char *str, char *buf, char *tmp)
+char	*read_file(int fd, char *str, char *buf)
 {
+	char	*tmp;
 	int		i;
 
 	i = 1;
@@ -98,6 +97,7 @@ char	*read_file(int fd, char *str, char *buf, char *tmp)
 		free(str);
 		str = tmp;
 	}
+	free (buf);
 	return (str);
 }
 
@@ -105,8 +105,7 @@ char	*read_file(int fd, char *str, char *buf, char *tmp)
 // so we have an array for out file descriptors
 char	*get_next_line(int fd)
 {
-	static char		*str[BUFFER_SIZE] = {NULL};
-	char			*tmp[BUFFER_SIZE];
+	static char		*str[8192] = {NULL};
 	char			*buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -114,8 +113,9 @@ char	*get_next_line(int fd)
 	buf = (char *)malloc((sizeof(char) * BUFFER_SIZE) + 1);
 	if (!buf)
 		return (NULL);
-	str[fd] = read_file(fd, str[fd], buf, tmp[fd]);
-	free(buf);
+	str[fd] = read_file(fd, str[fd], buf);
+	if (!str[fd])
+		return (NULL);
 	buf = next_line(str[fd]);
 	str[fd] = offset(str[fd]);
 	return (buf);
