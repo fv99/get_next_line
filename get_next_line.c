@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:02:08 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/02/02 13:08:47 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/02/02 15:14:14 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,25 +79,11 @@ char	*offset(char *a)
 	return (buf);
 }
 
-// static buffer str starts at the next line to be printed
-// we use strchr to find if there is a \n in the buffer
-// if theres not, we read from the file into the buffer
-// if \n is present, this is the line to print
-// next_line then gets the first line ending in '\n' from the static buffer
-// we return this line
-// then we offset the static buffer by the line we just returned
-char	*get_next_line(int fd)
+char	*read_file(int fd, char *str, char *buf)
 {
-	static char		*str;
-	char			*buf;
-	char			*tmp;
-	int				i;
+	int		i;
+	char	*tmp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	buf = (char *)malloc((sizeof(char) * BUFFER_SIZE) + 1);
-	if (!buf)
-		return (NULL);
 	i = 1;
 	while (!(ft_strchr(str, '\n')) && i != 0)
 	{
@@ -112,35 +98,56 @@ char	*get_next_line(int fd)
 		free(str);
 		str = tmp;
 	}
+	return (str);
+}
+
+// static buffer str starts at the next line to be printed
+// we use strchr to find if there is a \n in the buffer
+// if theres not, we read from the file into the buffer
+// if \n is present, this is the line to print
+// next_line then gets the first line ending in '\n' from the static buffer
+// we return this line
+// then we offset the static buffer by the line we just returned
+char	*get_next_line(int fd)
+{
+	static char		*str;
+	char			*buf;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buf = (char *)malloc((sizeof(char) * BUFFER_SIZE) + 1);
+	if (!buf)
+		return (NULL);
+	str = read_file(fd, str, buf);
 	free(buf);
 	buf = next_line(str);
 	str = offset(str);
 	return (buf);
 }
 
-int	main(int argc, char *argv[])
-{
-	char	*line;
-	int		fd;
+// int	main(int argc, char *argv[])
+// {
+// 	char	*line;
+// 	int		fd;
 
-	if (argc < 2)
-	{
-		printf("Usage: %s <file>\n", argv[0]);
-		return (1);
-	}
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-	{
-		perror("Failed to open file");
-		return (1);
-	}
-	line = get_next_line(fd); 
-	while (line != NULL) 
-	{
-		printf("%s", line);
-		free(line); 
-		line = get_next_line(fd); 
-	}
-	close (fd);
-	return (0);
-}
+// 	if (argc < 2)
+// 	{
+// 		printf("Usage: %s <file>\n", argv[0]);
+// 		return (1);
+// 	}
+// 	fd = open(argv[1], O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		perror("Failed to open file");
+// 		return (1);
+// 	}
+// 	line = get_next_line(fd);
+// 	while (line != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	close (fd);
+// 	return (0);
+// }
