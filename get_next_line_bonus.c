@@ -6,7 +6,7 @@
 /*   By: fvonsovs <fvonsovs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 14:52:07 by fvonsovs          #+#    #+#             */
-/*   Updated: 2023/01/25 20:17:07 by fvonsovs         ###   ########.fr       */
+/*   Updated: 2023/02/02 13:13:08 by fvonsovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ char	*get_next_line(int fd)
 {
 	static char		*str[BUFFER_SIZE] = {NULL};
 	char			*buf;
+	char			*tmp[BUFFER_SIZE] = {NULL};
 	int				i;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -103,7 +104,9 @@ char	*get_next_line(int fd)
 			return (NULL);
 		}
 		buf[i] = '\0';
-		str[fd] = ft_strjoin(str[fd], buf);
+		tmp[fd] = ft_strjoin(str[fd], buf);
+		free(str[fd]);
+		str[fd] = tmp[fd];
 	}
 	free(buf);
 	buf = next_line(str[fd]);
@@ -111,42 +114,46 @@ char	*get_next_line(int fd)
 	return (buf);
 }
 
-// int	main(void)
-// {
-// 	char	*line;
-// 	int		fd1;
-// 	int		fd2;
-// 	int		fd3;
-// 
-// 	fd1 = open("input1.txt", O_RDONLY);
-// 	if (fd1 == -1)
-// 	{
-// 		perror("Failed to open fd1");
-// 		return (1);
-// 	}
-// 	fd2 = open("input2.txt", O_RDONLY);
-// 	if (fd2 == -1)
-// 	{
-// 		perror("Failed to open fd2");
-// 		return (1);
-// 	}
-// 	fd3 = open("input3.txt", O_RDONLY);
-// 	if (fd3 == -1)
-// 	{
-// 		perror("Failed to open fd3");
-// 		return (1);
-// 	}
-// 	while (line != NULL)
-// 	{
-// 		line = get_next_line(fd1);
-// 		printf("%s", line);
-// 		line = get_next_line(fd2);
-// 		printf("%s", line);
-// 		line = get_next_line(fd3);
-// 		printf("%s", line);
-// 	}
-// 	close (fd1);
-// 	close (fd2);
-// 	close (fd3);
-// 	return (0);
-// }
+int	main(void)
+{
+	char	*line;
+	int		fd1;
+	int		fd2;
+	int		fd3;
+
+	fd1 = open("input1.txt", O_RDONLY);
+	if (fd1 == -1)
+	{
+		perror("Failed to open fd1");
+		return (1);
+	}
+	fd2 = open("input2.txt", O_RDONLY);
+	if (fd2 == -1)
+	{
+		perror("Failed to open fd2");
+		return (1);
+	}
+	fd3 = open("input3.txt", O_RDONLY);
+	if (fd3 == -1)
+	{
+		perror("Failed to open fd3");
+		return (1);
+	}
+	line = get_next_line(fd1);
+	while (line != NULL)
+	{
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd2);
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd3);
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd1);
+	}
+	close (fd1);
+	close (fd2);
+	close (fd3);
+	return (0);
+}
